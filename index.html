@@ -17,12 +17,13 @@
   <body>
     <script type="module">
       import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-      import {GLTFLoader} from "https://cdn.jsdelivr.netnpm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js";
+      import { GLTFLoader } from "https://cdn.jsdelivr.netnpm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js";
 
       let container;
       let camera, scene, renderer;
       let reticle;
       let controller;
+      let mixer;
 
       init();
       animate();
@@ -54,6 +55,8 @@
         controller.addEventListener("select", onSelect);
         scene.add(controller);
 
+        loadanimate()
+
         addReticleToScene();
 
         const button = ARButton.createButton(renderer, {
@@ -82,7 +85,7 @@
         // reticle.add(new THREE.AxesHelper(1));
       }
 
-      function animatedloader() {
+      function loadanimate() {
         // Instantiate a loader
         const loader = new GLTFLoader();
 
@@ -93,20 +96,11 @@
           // called when the resource is loaded
           function (gltf) {
             scene.add(gltf.scene);
-
-            gltf.animations; // Array<THREE.AnimationClip>
-            gltf.scene; // THREE.Group
-            gltf.scenes; // Array<THREE.Group>
-            gltf.cameras; // Array<THREE.Camera>
-            gltf.asset; // Object
-          },
-          // called while loading is progressing
-          function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-          },
-          // called when loading has errors
-          function (error) {
-            console.log("An error happened");
+            mixer = new THREE.AnimationMixer(gltf.scene);
+            const clips = gltf.animations;
+            const clip = THREE.animationClip.findbyname(clips, "Animation 15");
+            const action = mixer.clipAction(clip);
+            action.play();
           }
         );
       }
@@ -135,8 +129,9 @@
 
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
-
+      const clock = new THREE.Clock();
       function animate() {
+        mixer.update(clock.getDelta());
         renderer.setAnimationLoop(render);
       }
 
