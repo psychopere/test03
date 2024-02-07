@@ -12,12 +12,13 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
   </head>
 
   <body>
     <script type="module">
       import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-      import { GLTFLoader } from "https://cdn.jsdelivr.netnpm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js";
+      import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 
       let container;
       let camera, scene, renderer;
@@ -55,7 +56,7 @@
         controller.addEventListener("select", onSelect);
         scene.add(controller);
 
-        loadanimate()
+        loadanimate();
 
         addReticleToScene();
 
@@ -129,9 +130,13 @@
 
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
+
       const clock = new THREE.Clock();
       function animate() {
-        mixer.update(clock.getDelta());
+        if (mixer) {
+          mixer.update(clock.getDelta());
+        }
+
         renderer.setAnimationLoop(render);
       }
 
