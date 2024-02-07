@@ -107,7 +107,6 @@
           // called when the resource is loaded
           function (gltf) {
             scene.add(gltf.scene);
-            gltf.scene.scale.set(10, 10, 10);
             mixer = new THREE.AnimationMixer(gltf.scene);
             const clips = gltf.animations;
             const clip = THREE.AnimationClip.findByName(clips, "winstart");
