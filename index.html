@@ -54,6 +54,12 @@
 
         loadanimate();
 
+        const button = ARButton.createButton(renderer, {
+          requiredFeatures: ["hit-test"], // notice a new required feature
+        });
+        document.body.appendChild(button);
+        renderer.domElement.style.display = "none";
+        
       }
 
       function loadanimate() {
