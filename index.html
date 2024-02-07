@@ -53,12 +53,19 @@
         scene.add(light);
 
         loadanimate();
+        controller = renderer.xr.getController(0);
+        controller.addEventListener("select", onSelect);
+        scene.add(controller);
+
+        addReticleToScene();
+
 
         const button = ARButton.createButton(renderer, {
           requiredFeatures: ["hit-test"], // notice a new required feature
         });
         document.body.appendChild(button);
         renderer.domElement.style.display = "none";
+        window.addEventListener("resize", onWindowResize, false);
       }
       function addReticleToScene() {
         const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
