@@ -27,8 +27,7 @@
       let controller;
       let mixer;
 
-      // Instantiate a loader
-      const loader = new GLTFLoader();
+
 
       init();
       animate();
@@ -55,6 +54,32 @@
         var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         light.position.set(0.5, 1, 0.25);
         scene.add(light);
+        
+      // Instantiate a loader
+      const loader = new GLTFLoader();
+        
+        // Load a glTF resource
+        loader.load(
+          // resource URL
+          "/assets/scene.gltf",
+          // called when the resource is loaded
+          function (gltf) {
+            scene.add(gltf.scene);
+            mixer = new THREE.AnimationMixer(gltf.scene);
+            const clips = gltf.animations;
+            const clip = THREE.AnimationClip.findByName(clips, "winstart");
+            const action = mixer.clipAction(clip);
+            action.play();
+          },
+          // called while loading is progressing
+          function (xhr) {
+            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+          },
+          // called when loading has errors
+          function (error) {
+            console.log("An error happened");
+          }
+        );
 
         controller = renderer.xr.getController(0);
         controller.addEventListener("select", onSelect);
@@ -105,31 +130,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
-      function loadanimate() {
 
-        // Load a glTF resource
-        loader.load(
-          // resource URL
-          "/assets/scene.gltf",
-          // called when the resource is loaded
-          function (gltf) {
-            scene.add(gltf.scene);
-            mixer = new THREE.AnimationMixer(gltf.scene);
-            const clips = gltf.animations;
-            const clip = THREE.AnimationClip.findByName(clips, "winstart");
-            const action = mixer.clipAction(clip);
-            action.play();
-          },
-          // called while loading is progressing
-          function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-          },
-          // called when loading has errors
-          function (error) {
-            console.log("An error happened");
-          }
-        );
-      }
 
       const clock = new THREE.Clock();
       function animate() {
