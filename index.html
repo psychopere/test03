@@ -86,7 +86,7 @@
 
       function onSelect() {
         if (reticle.visible) {
-          const mesh = loadanimate();
+          const mesh = loadanimate;
           // set the position of the cylinder based on where the reticle is
           mesh.position.setFromMatrixPosition(reticle.matrix);
           mesh.quaternion.setFromRotationMatrix(reticle.matrix);
@@ -105,7 +105,48 @@
       function loadanimate() {
         // Instantiate a loader
         const loader = new GLTFLoader();
+        // Initialize a loading manager to track the loading progress
+        const loadingManager = new THREE.LoadingManager();
 
+        // Create a loading bar element
+        const loadingBar = document.createElement("div");
+        loadingBar.className = "loading-bar";
+        document.body.appendChild(loadingBar);
+
+        // Track the loading progress
+        loadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
+          console.log(
+            "Started loading file: " +
+              url +
+              ".\nLoaded " +
+              itemsLoaded +
+              " of " +
+              itemsTotal +
+              " files."
+          );
+        };
+
+        loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+          // Calculate loading progress percentage
+          const progress = (itemsLoaded / itemsTotal) * 100;
+          console.log(
+            "Loading file: " +
+              url +
+              ".\nLoaded " +
+              itemsLoaded +
+              " of " +
+              itemsTotal +
+              " files."
+          );
+          console.log("Progress: " + progress.toFixed(2) + "%");
+
+          // Update the loading bar
+          loadingBar.style.width = progress + "%";
+        };
+
+        loadingManager.onError = function (url) {
+          console.log("Error loading file: " + url);
+        };
         // Load a glTF resource
         loader.load(
           // resource URL
@@ -119,7 +160,6 @@
             const action = mixer.clipAction(clip);
             action.play();
           }
-
         );
       }
 
