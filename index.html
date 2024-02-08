@@ -93,6 +93,8 @@
         document.body.appendChild(button);
         renderer.domElement.style.display = "none";
         window.addEventListener("resize", onWindowResize, false);
+
+        camera.position.z = gltf.scene == "dino" ? 25:500;
       }
       function addReticleToScene() {
         const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
