@@ -86,12 +86,12 @@
 
       function onSelect() {
         if (reticle.visible) {
-          
+          const mesh = new THREE.loadanimate();
           // set the position of the cylinder based on where the reticle is
-          loadanimate.position.setFromMatrixPosition(reticle.matrix);
-          loadanimate.quaternion.setFromRotationMatrix(reticle.matrix);
+          mesh.position.setFromMatrixPosition(reticle.matrix);
+          mesh.quaternion.setFromRotationMatrix(reticle.matrix);
 
-          scene.add(loadanimate);
+          scene.add(mesh);
         }
       }
 
