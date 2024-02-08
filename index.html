@@ -30,72 +30,69 @@
       // Instantiate a loader
       const loader = new GLTFLoader();
 
-
-      init();
       animate();
 
-      function init() {
-        container = document.createElement("div");
-        document.body.appendChild(container);
+      container = document.createElement("div");
+      document.body.appendChild(container);
 
-        scene = new THREE.Scene();
+      scene = new THREE.Scene();
 
-        camera = new THREE.PerspectiveCamera(
-          70,
-          window.innerWidth / window.innerHeight,
-          0.01,
-          20
-        );
+      camera = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        0.01,
+        20
+      );
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.xr.enabled = true;
-        container.appendChild(renderer.domElement);
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.xr.enabled = true;
+      container.appendChild(renderer.domElement);
 
-        var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-        light.position.set(0.5, 1, 0.25);
-        scene.add(light);
+      var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+      light.position.set(0.5, 1, 0.25);
+      scene.add(light);
 
-        
-        // Load a glTF resource
-        loader.load(
-          // resource URL
-          "assets/scene.gltf",
-          // called when the resource is loaded
-          function (gltf) {
-            scene.add(gltf.scene);
-            mixer = new THREE.AnimationMixer(gltf.scene);
-            const clips = gltf.animations;
-            const clip = THREE.AnimationClip.findByName(clips, "winstart");
-            const action = mixer.clipAction(clip);
-            action.play();
-          },
-          // called while loading is progressing
-          function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-          },
-          // called when loading has errors
-          function (error) {
-            console.log("An error happened");
-          }
-        );
+      // Load a glTF resource
+      loader.load(
+        // resource URL
+        "assets/scene.gltf",
+        // called when the resource is loaded
+        function (gltf) {
+          const model = gltf.scene;
+          //scene.add(model);
+          mixer = new THREE.AnimationMixer(model);
+          const clips = gltf.animations;
+          const clip = THREE.AnimationClip.findByName(clips, "winstart");
+          const action = mixer.clipAction(clip);
+          action.play();
+        },
+        // called while loading is progressing
+        function (xhr) {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        // called when loading has errors
+        function (error) {
+          console.log("An error happened");
+        }
+      );
 
-        controller = renderer.xr.getController(0);
-        controller.addEventListener("select", onSelect);
-        scene.add(controller);
+      controller = renderer.xr.getController(0);
+      controller.addEventListener("select", onSelect);
+      scene.add(controller);
 
-        addReticleToScene();
+      addReticleToScene();
 
-        const button = ARButton.createButton(renderer, {
-          requiredFeatures: ["hit-test"], // notice a new required feature
-        });
-        document.body.appendChild(button);
-        renderer.domElement.style.display = "none";
-        window.addEventListener("resize", onWindowResize, false);
+      const button = ARButton.createButton(renderer, {
+        requiredFeatures: ["hit-test"], // notice a new required feature
+      });
+      document.body.appendChild(button);
+      renderer.domElement.style.display = "none";
+      window.addEventListener("resize", onWindowResize, false);
 
-        camera.position.z = gltf.scene == "dino" ? 25:500;
-      }
+      camera.position.z = gltf.scene == "dino" ? 25 : 500;
+
       function addReticleToScene() {
         const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
           -Math.PI / 2
@@ -117,10 +114,10 @@
       function onSelect() {
         if (reticle.visible) {
           // set the position of the cylinder based on where the reticle is
-          loader.position.setFromMatrixPosition(reticle.matrix);
-          loader.quaternion.setFromRotationMatrix(reticle.matrix);
+          model.position.setFromMatrixPosition(reticle.matrix);
+          model.quaternion.setFromRotationMatrix(reticle.matrix);
 
-          scene.add(loader);
+          scene.add(model);
         }
       }
 
@@ -130,8 +127,6 @@
 
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
-
-
 
       const clock = new THREE.Clock();
       function animate() {
