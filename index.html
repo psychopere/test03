@@ -27,6 +27,8 @@
       let controller;
       let mixer;
 
+      // Instantiate a loader
+      const loader = new GLTFLoader();
 
 
       init();
@@ -55,8 +57,6 @@
         light.position.set(0.5, 1, 0.25);
         scene.add(light);
 
-      // Instantiate a loader
-      const loader = new GLTFLoader();
         
         // Load a glTF resource
         loader.load(
