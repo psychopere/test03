@@ -114,7 +114,6 @@
 
       function onSelect() {
         if (reticle.visible) {
-          loadanimate();
           // set the position of the cylinder based on where the reticle is
           loader.position.setFromMatrixPosition(reticle.matrix);
           loader.quaternion.setFromRotationMatrix(reticle.matrix);
