@@ -118,11 +118,8 @@
             const clip = THREE.AnimationClip.findByName(clips, "winstart");
             const action = mixer.clipAction(clip);
             action.play();
-          },
-
-          function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
           }
+
         );
       }
 
