@@ -30,8 +30,10 @@
       // Instantiate a loader
       const loader = new GLTFLoader();
 
+      init();
       animate();
 
+      function init() {
       container = document.createElement("div");
       document.body.appendChild(container);
 
@@ -92,7 +94,7 @@
       window.addEventListener("resize", onWindowResize, false);
 
       camera.position.z = gltf.scene == "dino" ? 25 : 500;
-
+    }
       function addReticleToScene() {
         const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
           -Math.PI / 2
