@@ -27,6 +27,9 @@
       let controller;
       let mixer;
 
+      // Instantiate a loader
+      const loader = new GLTFLoader();
+
       init();
       animate();
 
@@ -103,8 +106,6 @@
       }
 
       function loadanimate() {
-        // Instantiate a loader
-        const loader = new GLTFLoader();
 
         // Load a glTF resource
         loader.load(
